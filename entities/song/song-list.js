@@ -10,7 +10,7 @@ import {
 
 const { Error: MongooseError } = mongoose;
 
-const makeSongList = ({ SongModel = {} }) => {
+const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
   const addSong = async (song) => {
     try {
       const created = await SongModel.create(song);
@@ -80,7 +80,18 @@ const makeSongList = ({ SongModel = {} }) => {
 
   // TO DO!
   // Make sure all the related lyrics are deleted too!
-  const deleteSong = async (id) => await SongModel.findByIdAndDelete(id);
+  const deleteSong = async (id) => {
+    try {
+      const song = await getSong(id);
+      if (!song) throw new ResourceNotFoundError();
+      await SongModel.findByIdAndDelete(id);
+      await LyricsModel.findByIdAndDelete(song.lyrics);
+    } catch (e) {
+      if (e instanceof MongooseError.CastError)
+        throw new ResourceNotFoundError();
+      throw e;
+    }
+  };
 
   return Object.freeze({
     addSong,

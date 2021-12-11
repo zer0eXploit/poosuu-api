@@ -4,6 +4,10 @@ import {
   ResourceNotFoundError,
   UniqueConstraintError,
 } from "../../helpers/errors.js";
+import {
+  buildPaginationObject,
+  extractPaginationInfo,
+} from "../../helpers/pagination.js";
 
 const { Error: MongooseError } = mongoose;
 
@@ -26,26 +30,10 @@ const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
 
   const getArtistById = async (id) => await ArtistModel.findById(id);
 
-  const extractPaginationInfo = (query) => {
-    const sortBy = query.sortBy || "title";
-    const page = parseInt(query.page, 10) || 1;
-    let limit = parseInt(query.limit) || 25;
-    if (limit > 25) limit = 25;
-    const skip = (page - 1) * limit;
-    return { sortBy: `id ${sortBy}`, limit, page, skip };
-  };
-
-  const buildPaginationObject = async (currentPage, limit) => {
-    const count = await getArtistCount();
-    const pages = Math.ceil(count / limit);
-    const next = pages > currentPage && currentPage + 1;
-    const prev = currentPage > 1 && currentPage - 1;
-    return { currentPage, pages, prev, next };
-  };
-
   const getAllArtists = async (query) => {
     const { sortBy, limit, page, skip } = extractPaginationInfo(query);
-    const pagination = await buildPaginationObject(page, limit);
+    const count = await getArtistCount();
+    const pagination = await buildPaginationObject(count, limit, page);
     const artists = await ArtistModel.find()
       .skip(skip)
       .limit(limit)

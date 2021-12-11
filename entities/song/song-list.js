@@ -30,10 +30,18 @@ const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
   const getSongById = async (id) => await SongModel.findById(id);
 
   const getAllSongs = async (query) => {
+    const { artist } = query;
     const { sortBy, limit, page, skip } = extractPaginationInfo(query);
     const count = await getSongCount();
     const pagination = await buildPaginationObject(count, limit, page);
-    const songs = await SongModel.find().skip(skip).limit(limit).sort(sortBy);
+    const findOption = {};
+
+    if (artist) findOption.artist = artist;
+
+    const songs = await SongModel.find(findOption)
+      .skip(skip)
+      .limit(limit)
+      .sort(sortBy);
     return { songs, pagination };
   };
 

@@ -39,8 +39,8 @@ const makeLyricsEndPointsHandler = (lyricsList) => {
     const {
       params: { id },
     } = httpRequest;
-    await lyricsList.findByIdAndDelete(id);
-
+    const resp = await lyricsList.findByIdAndDelete(id);
+    if (resp) return makeHttpResponse(resp);
     return makeEmptyHttpResponse();
   };
 

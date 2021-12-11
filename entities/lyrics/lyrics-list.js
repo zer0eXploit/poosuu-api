@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 const { Error: MongooseError } = mongoose;
 
-const makeLyricsList = ({ LyricsModel = {} }) => {
+const makeLyricsList = ({ LyricsModel = {}, SongModel = {} }) => {
   const add = async (lyrics) => await LyricsModel.create(lyrics);
 
   const findById = async (lyricId) => {
@@ -34,8 +34,17 @@ const makeLyricsList = ({ LyricsModel = {} }) => {
     }
   };
 
+  const getSongCount = async (lyrics) => await SongModel.count({ lyrics });
+
   const findByIdAndDelete = async (lyricsId) => {
     try {
+      const count = await getSongCount(lyricsId);
+      if (count > 0) {
+        return {
+          message:
+            "Please delete or unlink the song currently linked to this lyrics.",
+        };
+      }
       await LyricsModel.findByIdAndDelete(lyricsId);
     } catch (e) {
       if (e instanceof MongooseError.CastError)

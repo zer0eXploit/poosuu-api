@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import {
   ResourceNotFoundError,
   UniqueConstraintError,
@@ -6,7 +7,7 @@ import {
 
 const { Error: MongooseError } = mongoose;
 
-const makeArtistList = ({ ArtistModel = {} }) => {
+const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
   const createArtist = async (artist) => {
     try {
       const created = await ArtistModel.create(artist);
@@ -93,13 +94,29 @@ const makeArtistList = ({ ArtistModel = {} }) => {
     }
   };
 
-  //   DELETE must happen only after all the songs of the artist are deleted
-  //   const deleteArtist = async (id) => await ArtistModel.findByIdAndDelete(id);
+  const countArtistSongs = async (artist) => await SongModel.count({ artist });
+
+  const deleteArtist = async (id) => {
+    try {
+      const songs = await countArtistSongs(id);
+      if (songs > 0) {
+        return {
+          message: "Please delete all the songs related to the artist first.",
+        };
+      }
+      await ArtistModel.findByIdAndDelete(id);
+    } catch (e) {
+      if (e instanceof MongooseError.CastError)
+        throw new ResourceNotFoundError();
+      throw e;
+    }
+  };
 
   return Object.freeze({
     createArtist,
     getArtist,
     updateArtist,
+    deleteArtist,
   });
 };
 

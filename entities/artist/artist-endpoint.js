@@ -38,10 +38,11 @@ const makeArtistEndpointsHandler = (artistList) => {
   };
 
   const deleteArtist = async (httpRequest) => {
-    // const {
-    //   params: { id },
-    // } = httpRequest;
-    // await songList.deleteSong(id);
+    const {
+      params: { id },
+    } = httpRequest;
+    const resp = await artistList.deleteArtist(id);
+    if (resp) return makeHttpResponse(resp);
     return makeEmptyHttpResponse();
   };
 

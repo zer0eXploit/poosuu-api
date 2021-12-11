@@ -1,25 +1,13 @@
-import mongoose from "mongoose";
-
-import isValidUrl from "../../helpers/is-url.js";
+import {
+  isValidObjectId,
+  isString,
+  isEmptyString,
+  isValidUrl,
+} from "../../helpers/validation.js";
 import requiredParam from "../../helpers/required-param.js";
 import { InvalidPropertyError } from "../../helpers/errors.js";
 
-const {
-  Types: { ObjectId },
-} = mongoose;
-
 const makeSong = (songData = requiredParam("SongData")) => {
-  const isString = (value) => typeof value === "string";
-  const isEmptyString = (value) => value.length === 0;
-
-  const isValidObjectId = (id) => {
-    if (ObjectId.isValid(id)) {
-      if (String(new ObjectId(id)) === id) return true;
-      return false;
-    }
-    return false;
-  };
-
   const validateCoverArt = (artUrl) => {
     if (!isString(artUrl))
       throw new InvalidPropertyError("Cover Art url is not valid.");
@@ -43,6 +31,11 @@ const makeSong = (songData = requiredParam("SongData")) => {
       throw new InvalidPropertyError("Song description must not be empty.");
   };
 
+  const validateObjectId = (label, value) => {
+    if (!isValidObjectId(value))
+      throw new InvalidPropertyError(label + " is invalid.");
+  };
+
   const validate = ({
     title = requiredParam("title"),
     description = requiredParam("description"),
@@ -53,8 +46,8 @@ const makeSong = (songData = requiredParam("SongData")) => {
     validateTitle(title);
     validateDescription(description);
     validateCoverArt(coverArt);
-    isValidObjectId(artist);
-    isValidObjectId(lyrics);
+    validateObjectId("artist", artist);
+    validateObjectId("lyrics", lyrics);
     return {
       title,
       description,

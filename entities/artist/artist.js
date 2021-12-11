@@ -1,11 +1,13 @@
-import isValidUrl from "../../helpers/is-url.js";
+import {
+  isString,
+  isEmptyString,
+  isValidUrl,
+} from "../../helpers/validation.js";
+
 import requiredParam from "../../helpers/required-param.js";
 import { InvalidPropertyError } from "../../helpers/errors.js";
 
 const makeArtist = (artistData = requiredParam("ArtistData")) => {
-  const isString = (value) => typeof value === "string";
-  const isEmptyString = (value) => value.length === 0;
-
   const validateUrl = (label, url) => {
     if (!isString(url))
       throw new InvalidPropertyError(label + " must be a string.");

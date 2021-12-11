@@ -1,19 +1,25 @@
-import isArray from "../../helpers/is-array.js";
+import {
+  isArray,
+  isString,
+  isEmptyString,
+  isEmptyArray,
+} from "../../helpers/validation.js";
+
 import requiredParam from "../../helpers/required-param.js";
 import { InvalidPropertyError } from "../../helpers/errors.js";
 
 const makeLyrics = (lyricsData = requiredParam("lyricsData")) => {
   const validateTitle = (title) => {
-    if (typeof title !== "string")
+    if (!isString(title))
       throw new InvalidPropertyError("Song title is not valid.");
-    if (title.length === 0)
+    if (isEmptyString(title))
       throw new InvalidPropertyError("Song title must not be empty.");
   };
 
   const validateLyrics = (label, lyrics) => {
     if (!isArray(lyrics))
       throw new InvalidPropertyError("Lyrics structure is not valid.");
-    if (lyrics.length === 0)
+    if (isEmptyArray(lyrics))
       throw new InvalidPropertyError(`${label} must not be empty.`);
   };
 

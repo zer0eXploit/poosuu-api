@@ -1,10 +1,13 @@
 import { Router } from "express";
 
-import handleArtistsEndpoint from "../../../controllers/artist.js";
+import handleArtistsEndpoint, {
+  handleArtistSongsEndpoint,
+} from "../../../controllers/artist.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router.route("/:id").all(handleArtistsEndpoint);
+router.route("/:id/songs").all(handleArtistSongsEndpoint);
 router.route("/").get(handleArtistsEndpoint).post(handleArtistsEndpoint);
 
 export default router;

@@ -62,6 +62,24 @@ const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
     }
   };
 
+  const getArtistSongs = async (artistId, query) => {
+    try {
+      const { sortBy, limit, page, skip } = extractPaginationInfo(query);
+      const count = await getSongCount();
+      const pagination = await buildPaginationObject(count, limit, page);
+
+      const songs = await SongModel.find({ artist: artistId })
+        .skip(skip)
+        .limit(limit)
+        .sort(sortBy);
+      return { songs, pagination };
+    } catch (e) {
+      if (e instanceof MongooseError.CastError)
+        throw new ResourceNotFoundError();
+      throw e;
+    }
+  };
+
   const updateSong = async (songId, updateData) => {
     try {
       const options = { new: true };
@@ -106,6 +124,7 @@ const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
     getSong,
     updateSong,
     deleteSong,
+    getArtistSongs,
   });
 };
 

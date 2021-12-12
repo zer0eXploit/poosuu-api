@@ -24,6 +24,12 @@ const makeAdminList = ({ AdminModel = {} }) => {
 
   const getAdminById = async (id) => await AdminModel.findById(id);
 
+  const getAdminByEmail = async (email) =>
+    await AdminModel.findOne({ email }).select("+password");
+
+  const getAdminByUsername = async (username) =>
+    await AdminModel.findOne({ username }).select("+password");
+
   const updateAdmin = async (adminId, updateData) => {
     try {
       const options = { new: true };
@@ -52,6 +58,8 @@ const makeAdminList = ({ AdminModel = {} }) => {
     createAdmin,
     getAdminById,
     updateAdmin,
+    getAdminByEmail,
+    getAdminByUsername,
   });
 };
 

@@ -23,6 +23,8 @@ app.use(express.json());
 if (process.env.NODE_ENV !== "production") app.use(morgan("tiny"));
 
 // Mount Routes
+app.get("/", (_req, res) => res.json({ message: "Hello 世界!" }));
+
 app.use("/v1/", v1Routes);
 
 // Error Handlers

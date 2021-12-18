@@ -45,6 +45,18 @@ const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
     return { songs, pagination };
   };
 
+  const searchSongs = async (keyword) => {
+    const artists = await SongModel.find(
+      { $text: { $search: keyword } },
+      { score: { $meta: "textScore" } }
+    )
+      .sort({ score: { $meta: "textScore" } })
+      .select("_id title coverArt")
+      .limit(5);
+
+    return artists;
+  };
+
   const getSong = async (id, query = {}) => {
     try {
       if (id) {
@@ -52,6 +64,8 @@ const makeSongList = ({ SongModel = {}, LyricsModel = {} }) => {
         if (!song) throw new ResourceNotFoundError();
         return song;
       }
+
+      if (query.search) return await searchSongs(query.search);
 
       const songs = await getAllSongs(query);
       return songs;

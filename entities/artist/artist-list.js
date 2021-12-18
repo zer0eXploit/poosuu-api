@@ -41,6 +41,18 @@ const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
     return { artists, pagination };
   };
 
+  const searchArtist = async (keyword) => {
+    const artists = await ArtistModel.find(
+      { $text: { $search: keyword } },
+      { score: { $meta: "textScore" } }
+    )
+      .sort({ score: { $meta: "textScore" } })
+      .select("_id name image")
+      .limit(5);
+
+    return artists;
+  };
+
   const getArtist = async (id, query = {}) => {
     try {
       if (id) {
@@ -48,6 +60,8 @@ const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
         if (!artist) throw new ResourceNotFoundError();
         return artist;
       }
+
+      if (query.search) return await searchArtist(query.search);
 
       const artists = await getAllArtists(query);
       return artists;

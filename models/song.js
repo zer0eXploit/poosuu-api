@@ -11,6 +11,7 @@ const SongSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
     description: {
       type: String,

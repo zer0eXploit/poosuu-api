@@ -1,8 +1,6 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
 import requiredParam from "../../helpers/required-param.js";
 import { isValidEmail } from "../../helpers/validation.js";
+import { pwCorrect, generateToken } from "../../helpers/auth.js";
 import { makeHttpResponse } from "../../helpers/http-response.js";
 
 export const makeAdminLoginEndpointHandler = (adminList) => {
@@ -24,11 +22,9 @@ export const makeAdminLoginEndpointHandler = (adminList) => {
 
     if (!admin) return makeHttpResponse({ message: "Bad credentials." }, 401);
 
-    if (bcrypt.compareSync(password, admin.password)) {
-      const jwtSecret = process.env.JWT_SECRET;
-      const expiresIn = process.env.JWT_EXPIRES || "2h";
-      const options = { expiresIn };
-      const token = jwt.sign({ adminId: admin._id }, jwtSecret, options);
+    if (pwCorrect(password, admin.password)) {
+      const payload = { adminId: admin._id };
+      const token = generateToken(payload);
       return makeHttpResponse({ token });
     }
 

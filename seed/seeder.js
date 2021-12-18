@@ -47,10 +47,11 @@ const seedToDB = async () => {
     await Artist.create(artists);
     await Admin.create(admins);
     await Lyrics.create(lyrics);
+
     console.log(`DATA SEEDED`.green.inverse);
     process.exit();
   } catch (e) {
-    console.log(`${e}`.red.inverse);
+    console.log(`${e}`.white.inverse);
     process.exit();
   }
 };
@@ -64,7 +65,7 @@ const destroyDB = async () => {
     console.log(`ALL DELETED`.green.inverse);
     process.exit();
   } catch (e) {
-    console.log(`${e}`.red.inverse);
+    console.log(`${e}`.white.inverse);
     process.exit();
   }
 };

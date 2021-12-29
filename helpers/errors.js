@@ -48,3 +48,15 @@ export class UniqueConstraintError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export class AccessTokenError extends Error {
+  constructor(msg = "Access token is not valid.", statusCode = 401) {
+    super(msg);
+
+    if (Error.captureStackTrace)
+      Error.captureStackTrace(this, AccessTokenError);
+
+    this.name = "AccessTokenError";
+    this.statusCode = statusCode;
+  }
+}

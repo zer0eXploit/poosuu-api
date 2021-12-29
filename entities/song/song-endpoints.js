@@ -4,7 +4,12 @@ import {
   makeHttpResponse,
   makeEmptyHttpResponse,
 } from "../../helpers/http-response.js";
-import { ResourceNotFoundError } from "../../helpers/errors.js";
+import { checkAuthorization } from "../../helpers/auth.js";
+
+import {
+  ResourceNotFoundError,
+  AccessTokenError,
+} from "../../helpers/errors.js";
 
 // TODO: POST TO ALGOLIA INDEX
 
@@ -20,7 +25,8 @@ const makeSongEndpointsHandler = (songList) => {
   };
 
   const createSong = async (httpRequest) => {
-    const { body } = httpRequest;
+    const { body, headers } = httpRequest;
+    checkAuthorization(headers);
     const validSong = makeSong(body);
     const created = await songList.addSong(validSong);
     return makeHttpResponse(created);
@@ -31,6 +37,7 @@ const makeSongEndpointsHandler = (songList) => {
       body,
       params: { id },
     } = httpRequest;
+    checkAuthorization(headers);
     const song = makeSong(body);
     const updated = await songList.updateSong(id, song);
     if (!updated) throw new ResourceNotFoundError();
@@ -41,6 +48,7 @@ const makeSongEndpointsHandler = (songList) => {
     const {
       params: { id },
     } = httpRequest;
+    checkAuthorization(headers);
     await songList.deleteSong(id);
     return makeEmptyHttpResponse();
   };

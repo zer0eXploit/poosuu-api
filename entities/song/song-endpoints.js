@@ -6,10 +6,7 @@ import {
 } from "../../helpers/http-response.js";
 import { checkAuthorization } from "../../helpers/auth.js";
 
-import {
-  ResourceNotFoundError,
-  AccessTokenError,
-} from "../../helpers/errors.js";
+import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 // TODO: POST TO ALGOLIA INDEX
 

@@ -10,11 +10,8 @@ export const generateToken = (payload, options = { expiresIn: "2h" }) => {
   return jwt.sign(payload, jwtSecret, options);
 };
 
-export const extractTokenFromHeader = (headers) => {
-  if (!headers.authorization) return false;
-  const token = headers.authorization.split(" ")[1];
-  return token;
-};
+export const extractTokenFromHeader = (headers) =>
+  headers?.authorization?.split(" ")[1];
 
 export const getDecodedToken = (token) => {
   if (!token) return false;

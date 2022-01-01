@@ -4,6 +4,7 @@ import {
   makeHttpResponse,
   makeEmptyHttpResponse,
 } from "../../helpers/http-response.js";
+import { checkAuthorization } from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 // TODO: POST TO ALGOLIA INDEX
@@ -20,6 +21,9 @@ const makeArtistEndpointsHandler = (artistList) => {
   };
 
   const createArtist = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const { body } = httpRequest;
     const validArtist = makeArtist(body);
     const created = await artistList.createArtist(validArtist);
@@ -27,6 +31,9 @@ const makeArtistEndpointsHandler = (artistList) => {
   };
 
   const updateArtist = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const {
       body,
       params: { id },
@@ -38,6 +45,9 @@ const makeArtistEndpointsHandler = (artistList) => {
   };
 
   const deleteArtist = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const {
       params: { id },
     } = httpRequest;

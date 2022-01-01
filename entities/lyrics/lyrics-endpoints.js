@@ -5,6 +5,7 @@ import {
   makeEmptyHttpResponse,
   makeErrorHttpResponse,
 } from "../../helpers/http-response.js";
+import { checkAuthorization } from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 const makeLyricsEndPointsHandler = (lyricsList) => {
@@ -16,6 +17,9 @@ const makeLyricsEndPointsHandler = (lyricsList) => {
   };
 
   const addNewLyrics = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const { body } = httpRequest;
     const lyrics = makeLyrics(body);
     const addedLyrics = await lyricsList.add(lyrics);
@@ -23,6 +27,9 @@ const makeLyricsEndPointsHandler = (lyricsList) => {
   };
 
   const updateLyrics = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const {
       body,
       params: { id },
@@ -36,6 +43,9 @@ const makeLyricsEndPointsHandler = (lyricsList) => {
   };
 
   const deleteLyrics = async (httpRequest) => {
+    const { headers } = httpRequest;
+    checkAuthorization(headers);
+
     const {
       params: { id },
     } = httpRequest;

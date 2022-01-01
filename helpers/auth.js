@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { AccessTokenError } from "./errors.js";
+import { AuthorizationError } from "./errors.js";
 
 export const pwCorrect = (plain, hashed) => bcrypt.compareSync(plain, hashed);
 
@@ -30,9 +30,9 @@ export const getDecodedToken = (token) => {
 export const checkAuthorization = (headers) => {
   // Check for access token
   const token = extractTokenFromHeader(headers);
-  if (!token) throw new AccessTokenError("Access Token is required.");
+  if (!token) throw new AuthorizationError("Missing authorization header.");
   const decodedToken = getDecodedToken(token);
-  if (!decodedToken) throw new AccessTokenError();
+  if (!decodedToken) throw new AuthorizationError();
 
   return decodedToken;
 };

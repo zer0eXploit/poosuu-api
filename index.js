@@ -4,6 +4,7 @@ import express from "express";
 
 import "./config/env.js";
 import connectDB from "./config/db.js";
+import connectRedis from "./config/redis.js";
 
 import v1Routes from "./routes/v1/index.js";
 
@@ -16,6 +17,7 @@ app.disable("x-powered-by");
 
 // DB connection
 connectDB();
+connectRedis();
 
 // Middlewares
 app.use(express.json());

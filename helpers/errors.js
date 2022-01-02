@@ -60,3 +60,15 @@ export class AuthorizationError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export class InvalidAPIKeyError extends Error {
+  constructor(msg = "Unauthorized: invalid API key.", statusCode = 401) {
+    super(msg);
+
+    if (Error.captureStackTrace)
+      Error.captureStackTrace(this, InvalidAPIKeyError);
+
+    this.name = "InvalidAPIKeyError";
+    this.statusCode = statusCode;
+  }
+}

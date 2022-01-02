@@ -1,7 +1,10 @@
+import crypto from "crypto";
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { AuthorizationError } from "./errors.js";
+import { client } from "../config/redis.js";
+import { AuthorizationError, InvalidAPIKeyError } from "./errors.js";
 
 export const pwCorrect = (plain, hashed) => bcrypt.compareSync(plain, hashed);
 
@@ -32,4 +35,19 @@ export const checkAuthorization = (headers) => {
   if (!decodedToken) throw new AuthorizationError();
 
   return decodedToken;
+};
+
+export const generateAPIKey = () => crypto.randomBytes(20).toString("base64");
+
+export const generateHashFrom = (value) =>
+  crypto.createHash("sha256").update(value).digest("hex");
+
+export const checkAPIKey = async (httpRequest) => {
+  const { query, headers, host } = httpRequest;
+  const apiKey = query.apiKey || headers["x-api-key"];
+
+  if (!apiKey) throw new InvalidAPIKeyError();
+  const savedHost = await client.get(apiKey);
+
+  if (host !== savedHost) throw new InvalidAPIKeyError();
 };

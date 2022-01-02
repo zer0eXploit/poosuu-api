@@ -2,7 +2,11 @@ import requiredParam from "../../helpers/required-param.js";
 
 import { client } from "../../config/redis.js";
 import { isValidEmail } from "../../helpers/validation.js";
-import { makeHttpResponse } from "../../helpers/http-response.js";
+import {
+  makeHttpResponse,
+  makeErrorHttpResponse,
+  makeEmptyHttpResponse,
+} from "../../helpers/http-response.js";
 import {
   pwCorrect,
   generateToken,
@@ -55,7 +59,27 @@ export const makeAdminLoginEndpointHandler = (adminList) => {
 };
 
 export const makeAdminAPIKeyEndpointHandler = () => {
-  const postCreateAPIKey = async (httpRequest) => {
+  const getAPIKeys = async (httpRequest) => {
+    const {
+      headers,
+      params: { apiKey },
+    } = httpRequest;
+    checkAuthorization(headers);
+
+    if (apiKey) {
+      const domain = await client.get(apiKey);
+      if (domain) return makeHttpResponse({ apiKey, domain }, 200);
+
+      return makeErrorHttpResponse({
+        status: 404,
+        errorMessage: "API key not found.",
+      });
+    }
+    const keys = await client.keys("*");
+    return makeHttpResponse({ keys }, 200);
+  };
+
+  const postAPIKeys = async (httpRequest) => {
     const {
       body: { host },
       headers,
@@ -68,13 +92,56 @@ export const makeAdminAPIKeyEndpointHandler = () => {
     const key = generateAPIKey();
     await client.set(key, host);
 
-    return makeHttpResponse({ key }, 201);
+    return makeHttpResponse({ key, host }, 201);
+  };
+
+  const putAPIKeys = async (httpRequest) => {
+    const {
+      headers,
+      params: { apiKey },
+      body: { host },
+    } = httpRequest;
+    checkAuthorization(headers);
+
+    if (!host) requiredParam("host");
+
+    let existing = await client.get(apiKey);
+
+    if (existing) await client.set(apiKey, host);
+    else {
+      const key = generateAPIKey();
+      await client.set(key, host);
+      return makeHttpResponse({ key, host }, 200);
+    }
+
+    return makeHttpResponse({ apiKey, host }, 200);
+  };
+
+  const deleteAPIKeys = async (httpRequest) => {
+    const {
+      headers,
+      params: { apiKey },
+    } = httpRequest;
+    checkAuthorization(headers);
+
+    apiKey && (await client.del(apiKey));
+
+    return makeEmptyHttpResponse();
   };
 
   const handle = (httpRequest) => {
     switch (httpRequest.method) {
+      case "GET":
+        return getAPIKeys(httpRequest);
+
       case "POST":
-        return postCreateAPIKey(httpRequest);
+        return postAPIKeys(httpRequest);
+
+      case "PUT":
+        return putAPIKeys(httpRequest);
+
+      case "DELETE":
+        return deleteAPIKeys(httpRequest);
 
       default:
         return makeErrorHttpResponse({

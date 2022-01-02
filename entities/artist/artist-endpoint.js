@@ -4,13 +4,15 @@ import {
   makeHttpResponse,
   makeEmptyHttpResponse,
 } from "../../helpers/http-response.js";
-import { checkAuthorization } from "../../helpers/auth.js";
+import { checkAuthorization, checkAPIKey } from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 // TODO: POST TO ALGOLIA INDEX
 
 const makeArtistEndpointsHandler = (artistList) => {
   const getArtist = async (httpRequest) => {
+    await checkAPIKey(httpRequest);
+
     const {
       params: { id },
       query,

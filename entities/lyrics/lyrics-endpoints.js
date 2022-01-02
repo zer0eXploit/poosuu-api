@@ -5,11 +5,12 @@ import {
   makeEmptyHttpResponse,
   makeErrorHttpResponse,
 } from "../../helpers/http-response.js";
-import { checkAuthorization } from "../../helpers/auth.js";
+import { checkAuthorization, checkAPIKey } from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 const makeLyricsEndPointsHandler = (lyricsList) => {
   const getLyricsById = async (httpRequest) => {
+    await checkAPIKey(httpRequest);
     const { id } = httpRequest.params || {};
     const lyrics = await lyricsList.findById(id);
     if (!lyrics) throw new ResourceNotFoundError();

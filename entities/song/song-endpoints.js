@@ -4,7 +4,7 @@ import {
   makeHttpResponse,
   makeEmptyHttpResponse,
 } from "../../helpers/http-response.js";
-import { checkAuthorization } from "../../helpers/auth.js";
+import { checkAuthorization, checkAPIKey } from "../../helpers/auth.js";
 
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
@@ -12,6 +12,7 @@ import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 const makeSongEndpointsHandler = (songList) => {
   const getSong = async (httpRequest) => {
+    await checkAPIKey(httpRequest);
     const {
       params: { id },
       query,

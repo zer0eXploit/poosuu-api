@@ -1,8 +1,11 @@
 import { makeHttpResponse } from "../../helpers/http-response.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
+import { checkAPIKey } from "../../helpers/auth.js";
 
 const makeArtistSongsEndpointHandler = (songList) => {
   const getArtistSong = async (httpRequest) => {
+    await checkAPIKey(httpRequest);
+
     const {
       params: { id },
       query,

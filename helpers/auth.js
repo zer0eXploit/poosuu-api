@@ -37,7 +37,7 @@ export const checkAuthorization = (headers) => {
   return decodedToken;
 };
 
-export const generateAPIKey = () => crypto.randomBytes(20).toString("base64");
+export const generateAPIKey = () => crypto.randomBytes(20).toString("hex");
 
 export const generateHashFrom = (value) =>
   crypto.createHash("sha256").update(value).digest("hex");

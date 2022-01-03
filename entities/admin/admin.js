@@ -1,5 +1,3 @@
-import bcrypt from "bcryptjs";
-
 import {
   isString,
   isEmptyString,
@@ -8,6 +6,7 @@ import {
   isValidUsername,
 } from "../../helpers/validation.js";
 
+import { hashPassword } from "../../helpers/auth.js";
 import requiredParam from "../../helpers/required-param.js";
 import { InvalidPropertyError } from "../../helpers/errors.js";
 
@@ -45,15 +44,11 @@ const makeAdmin = (adminData = requiredParam("AdminData")) => {
     validatePassword(password);
     validateEmail(email);
 
-    // Hash User Password
-    var salt = bcrypt.genSaltSync(10);
-    var hashedPassword = bcrypt.hashSync(password, salt);
-
     return {
       name,
       username,
       email,
-      password: hashedPassword,
+      password: hashPassword(password),
     };
   };
 

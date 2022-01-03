@@ -42,6 +42,11 @@ export const generateAPIKey = () => crypto.randomBytes(20).toString("hex");
 export const generateHashFrom = (value) =>
   crypto.createHash("sha256").update(value).digest("hex");
 
+export const hashPassword = (plainPassword) => {
+  const salt = bcrypt.genSaltSync(10);
+  return bcrypt.hashSync(plainPassword, salt);
+};
+
 export const checkAPIKey = async (httpRequest) => {
   const { query, headers, host } = httpRequest;
   const apiKey = query.apiKey || headers["x-api-key"];

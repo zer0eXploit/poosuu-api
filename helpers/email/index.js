@@ -2,7 +2,8 @@ import nodemailer from "nodemailer";
 
 import accountCreationEmail from "./templates/account-creation.js";
 
-const { SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, ENV } = process.env;
+const { SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, NODE_ENV } =
+  process.env;
 
 let transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -26,7 +27,7 @@ const sendEmail = async ({ from, to, subject, text, html }) => {
     html,
   });
 
-  ENV !== "production" && console.log("Message sent: %s", info.messageId);
+  NODE_ENV !== "production" && console.log("Message sent: %s", info.messageId);
 };
 
 export const sendAccountCreationEmail = async (name, email, token) => {

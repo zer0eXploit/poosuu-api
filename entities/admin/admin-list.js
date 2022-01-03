@@ -24,6 +24,12 @@ const makeAdminList = ({ AdminModel = {} }) => {
 
   const getAdminById = async (id) => await AdminModel.findById(id);
 
+  const getAdminByIdWithPw = async (id) =>
+    await AdminModel.findById(id).select("+password");
+
+  const updateAdminPassword = async (id, password) =>
+    await AdminModel.findByIdAndUpdate(id, { password });
+
   const getAdminByEmail = async (email) =>
     await AdminModel.findOne({ email }).select("+password");
 
@@ -57,6 +63,8 @@ const makeAdminList = ({ AdminModel = {} }) => {
   return Object.freeze({
     createAdmin,
     getAdminById,
+    updateAdminPassword,
+    getAdminByIdWithPw,
     updateAdmin,
     getAdminByEmail,
     getAdminByUsername,

@@ -1,7 +1,8 @@
 import makeAdmin from "./admin.js";
 
-import { makeHttpResponse } from "../../helpers/http-response.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
+import { makeHttpResponse } from "../../helpers/http-response.js";
+import { sendAccountCreationEmail } from "../../helpers/email/index.js";
 
 const makeAdminEndpointsHandler = (adminList) => {
   const getAdmin = async (httpRequest) => {
@@ -19,6 +20,9 @@ const makeAdminEndpointsHandler = (adminList) => {
     const { _id, name, username, email } = await adminList.createAdmin(
       validAdmin
     );
+
+    await sendAccountCreationEmail(name, email);
+
     return makeHttpResponse({ _id, name, username, email }, 201);
   };
 

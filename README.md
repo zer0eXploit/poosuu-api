@@ -20,6 +20,12 @@ After setting the environment variables the server can be started via the follow
 
 > `npm start` (_for production with disabled logs_)
 
+It is a good idea to seed the database initially. The seed script populates the database with initial data to work with. The seed data is available in the `seed` folder. The commands are as followed:
+
+> `npm run db:seed` (_for seeding dummy data_)
+
+> `npm run db:destroy` (_for deleting all dummy data_)
+
 ## API Documentation
 
 The full API documentation is available [here](https://documenter.getpostman.com/view/8103362/UVXerxrb).

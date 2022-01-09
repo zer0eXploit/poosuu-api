@@ -1,5 +1,4 @@
 import "colors";
-import morgan from "morgan";
 import express from "express";
 
 import "./config/env.js";
@@ -22,7 +21,10 @@ connectRedis();
 // Middlewares
 app.use(express.json());
 
-if (process.env.NODE_ENV !== "production") app.use(morgan("tiny"));
+if (process.env.NODE_ENV !== "production") {
+  const { default: morgan } = await import("morgan");
+  app.use(morgan("tiny"));
+}
 
 // Mount Routes
 app.get("/", (_req, res) => res.json({ message: "Hello 世界!" }));

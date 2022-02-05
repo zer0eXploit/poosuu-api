@@ -1,4 +1,5 @@
 import "colors";
+import cors from "cors";
 import express from "express";
 
 import "./config/env.js";
@@ -10,6 +11,9 @@ import v1Routes from "./routes/v1/index.js";
 import { errorHandler, notFoundHandler } from "./helpers/error-handlers.js";
 
 const app = express();
+
+// Enable Cors
+app.use(cors());
 
 // Disable X-Powered-By: Express
 app.disable("x-powered-by");

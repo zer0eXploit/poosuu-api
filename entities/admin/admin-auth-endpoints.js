@@ -35,8 +35,30 @@ export const makeAdminLoginEndpointHandler = (adminList) => {
 
     if (pwCorrect(password, admin.password)) {
       const payload = { adminId: admin._id };
-      const token = generateToken(payload);
-      return makeHttpResponse({ token });
+
+      const {
+        _id: id,
+        name,
+        username,
+        email,
+        avatarUrl,
+        isEmailVeriried,
+        createdAt,
+      } = admin;
+
+      const responseData = {
+        admin: {
+          id,
+          name,
+          username,
+          email,
+          avatarUrl,
+          isEmailVeriried,
+          createdAt,
+        },
+        token: generateToken(payload),
+      };
+      return makeHttpResponse(responseData);
     }
 
     return makeHttpResponse({ message: "Bad credentials." }, 401);

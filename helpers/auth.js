@@ -48,11 +48,12 @@ export const hashPassword = (plainPassword) => {
 };
 
 export const checkAPIKey = async (httpRequest) => {
-  const { query, headers, host } = httpRequest;
+  const { query, headers } = httpRequest;
+  console.log(host);
   const apiKey = query.apiKey || headers["x-api-key"];
 
   if (!apiKey) throw new InvalidAPIKeyError();
   const savedHost = await client.get(apiKey);
 
-  if (host !== savedHost) throw new InvalidAPIKeyError();
+  if (!savedHost) throw new InvalidAPIKeyError();
 };

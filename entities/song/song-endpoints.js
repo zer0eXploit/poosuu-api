@@ -34,6 +34,7 @@ const makeSongEndpointsHandler = (songList) => {
     const {
       body,
       params: { id },
+      headers,
     } = httpRequest;
     checkAuthorization(headers);
     const song = makeSong(body);
@@ -45,6 +46,7 @@ const makeSongEndpointsHandler = (songList) => {
   const deleteSong = async (httpRequest) => {
     const {
       params: { id },
+      headers,
     } = httpRequest;
     checkAuthorization(headers);
     await songList.deleteSong(id);

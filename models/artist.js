@@ -8,7 +8,6 @@ const ArtistSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     bio: {
       type: String,
@@ -27,6 +26,8 @@ const ArtistSchema = new Schema(
     timestamps: true,
   }
 );
+
+ArtistSchema.index({ name: "text" });
 
 const Artist = mongoose.model("Artist", ArtistSchema);
 

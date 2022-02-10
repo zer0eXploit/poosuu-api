@@ -11,7 +11,6 @@ const SongSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     description: {
       type: String,
@@ -36,6 +35,8 @@ const SongSchema = new Schema(
     timestamps: true,
   }
 );
+
+SongSchema.index({ title: "text" });
 
 const Song = mongoose.model("Song", SongSchema);
 

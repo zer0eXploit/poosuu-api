@@ -9,10 +9,15 @@ import { checkAuthorization, checkAPIKey } from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 const makeLyricsEndPointsHandler = (lyricsList) => {
-  const getLyricsById = async (httpRequest) => {
+  const getLyrics = async (httpRequest) => {
     await checkAPIKey(httpRequest);
-    const { id } = httpRequest.params || {};
-    const lyrics = await lyricsList.findById(id);
+
+    const {
+      params: { id },
+      query,
+    } = httpRequest;
+
+    const lyrics = await lyricsList.getLyrics(id, query);
     if (!lyrics) throw new ResourceNotFoundError();
     return makeHttpResponse(lyrics);
   };
@@ -58,7 +63,7 @@ const makeLyricsEndPointsHandler = (lyricsList) => {
   const handle = async (httpRequest) => {
     switch (httpRequest.method) {
       case "GET":
-        return getLyricsById(httpRequest);
+        return getLyrics(httpRequest);
 
       case "POST":
         return addNewLyrics(httpRequest);

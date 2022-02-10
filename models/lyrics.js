@@ -18,6 +18,8 @@ const LyricsSchema = new Schema(
   }
 );
 
+LyricsSchema.index({ title: "text" });
+
 const Lyrics = mongoose.model("Lyrics", LyricsSchema);
 
 export default Lyrics;

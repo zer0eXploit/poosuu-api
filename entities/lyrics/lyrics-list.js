@@ -17,6 +17,34 @@ const makeLyricsList = ({ LyricsModel = {}, SongModel = {} }) => {
     }
   };
 
+  const searchLyrics = async (keyword) => {
+    const lyrics = await LyricsModel.find(
+      { $text: { $search: keyword } },
+      { score: { $meta: "textScore" } }
+    )
+      .sort({ score: { $meta: "textScore" } })
+      .select("_id title")
+      .limit(5);
+
+    return lyrics;
+  };
+
+  const getLyrics = async (id, query = {}) => {
+    try {
+      if (id) {
+        const lyrics = await findById(id);
+        if (!lyrics) throw new ResourceNotFoundError();
+        return lyrics;
+      }
+
+      if (query.search) return await searchLyrics(query.search);
+    } catch (e) {
+      if (e instanceof MongooseError.CastError)
+        throw new ResourceNotFoundError();
+      throw e;
+    }
+  };
+
   const findByIdAndUpdate = async (lyricsId, updateData) => {
     try {
       const options = { new: true };
@@ -55,7 +83,7 @@ const makeLyricsList = ({ LyricsModel = {}, SongModel = {} }) => {
 
   return Object.freeze({
     add,
-    findById,
+    getLyrics,
     findByIdAndUpdate,
     findByIdAndDelete,
   });

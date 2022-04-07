@@ -6,7 +6,7 @@ import handleSongEndpoint, {
 
 const router = Router();
 
-router.route("/spotify").get(handleSpotifySongsEndpoint);
+router.route("/search/spotify").get(handleSpotifySongsEndpoint);
 
 router.route("/:id").all(handleSongEndpoint);
 router.route("/").get(handleSongEndpoint).post(handleSongEndpoint);

@@ -1,7 +1,6 @@
 import SpotifyUtils from "../../helpers/spotify.js";
 
 import { checkAPIKey } from "../../helpers/auth.js";
-import { ResourceNotFoundError } from "../../helpers/errors.js";
 import { makeHttpResponse } from "../../helpers/http-response.js";
 
 const makeSpotifyArtistsInfoEndpointHandler = () => {

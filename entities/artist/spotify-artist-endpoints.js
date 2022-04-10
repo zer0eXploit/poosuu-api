@@ -8,11 +8,11 @@ const makeSpotifyArtistsInfoEndpointHandler = () => {
     await checkAPIKey(httpRequest);
 
     const {
-      query: { q, limit, page },
+      query: { search, limit, page },
     } = httpRequest;
 
     const searchData = {
-      q,
+      q: search,
       limit,
       // to calculate offset
       page: page && page > 1 ? page : 0,

@@ -36,7 +36,7 @@ const getAccessToken = async (clientId, clientSecret) => {
 
 const search = async ({
   q = "Are You with Me",
-  type = "track,",
+  type = "tracks",
   limit = 10,
   page = 0,
 }) => {
@@ -62,7 +62,9 @@ const search = async ({
   try {
     const response = await axios(axiosConfig);
 
-    return response.data;
+    return (
+      response.data?.[type === "artist" ? "artists" : "tracks"]?.items ?? []
+    );
   } catch (e) {
     console.error("[Spotify Artist Search]".red.inverse);
     console.error(e.response.data);

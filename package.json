@@ -8,7 +8,8 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "db:seed": "node seed/seeder.js -i",
-    "db:destroy": "node seed/seeder.js -d"
+    "db:destroy": "node seed/seeder.js -d",
+    "heroku-postbuild": "mkdir -p public/temp"
   },
   "keywords": [],
   "author": "",

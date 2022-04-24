@@ -6,6 +6,7 @@ const adaptRequest = (req = {}) => {
     params: req.params,
     query: req.query,
     body: req.body,
+    files: req.files,
     host: req.hostname,
   });
 };

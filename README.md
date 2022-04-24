@@ -12,6 +12,8 @@ When the server is started, it initiates connections to database servers used by
 
 In order to run the server, a few environment variables are required to be set properly and the most important variables being `DB_URI` and `REDIS_URI`.
 
+Image upload endpoint is also required to upload artist cover images. Currently using imgbb so, the URL can be obtained by creating an account on their website. `IMAGE_UPLOAD_URL` is the env var name for the endpoint.
+
 The environment variables can be referenced from the `.env.example` file from the project `config` folder.
 
 After setting the environment variables the server can be started via the following commands:

@@ -2,6 +2,7 @@ import asyncWrap from "express-async-handler";
 
 import artistsEndpointHandler, {
   spotifyArtistsEndpointHandler,
+  artistCoverEndpointHandler,
 } from "../entities/artist/index.js";
 import { artistSongsEndpointHandler } from "../entities/song/index.js";
 
@@ -33,5 +34,14 @@ export const handleSpotifyArtistsEndpoint = asyncWrap(
     res.set(headers).status(status).send(data);
   }
 );
+
+export const handleArtistCoverEndpoint = asyncWrap(async (req, res, _next) => {
+  const httpRequest = adaptRequest(req);
+  const { headers, status, data } = await artistCoverEndpointHandler(
+    httpRequest
+  );
+
+  res.set(headers).status(status).send(data);
+});
 
 export default handleArtistsEndpoint;

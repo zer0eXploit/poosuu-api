@@ -1,6 +1,8 @@
 import "colors";
+import path from "path";
 import cors from "cors";
 import express from "express";
+import fileUpload from "express-fileupload";
 
 import "./config/env.js";
 import connectDB from "./config/db.js";
@@ -14,6 +16,18 @@ const app = express();
 
 // Enable Cors
 app.use(cors());
+
+// Static Folder
+app.use("/static", express.static(path.join(process.cwd(), "public")));
+
+// File Upload
+app.use(
+  fileUpload({
+    limits: {
+      fileSize: parseInt(process.env.FILE_UPLOAD_LIMIT_NUM_MB) * 1024 * 1024,
+    },
+  })
+);
 
 // Disable X-Powered-By: Express
 app.disable("x-powered-by");

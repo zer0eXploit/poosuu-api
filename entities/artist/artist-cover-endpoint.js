@@ -11,7 +11,6 @@ const makeArtistCoverEndpointsHandler = () => {
   const createArtistCover = async (httpRequest) => {
     const { headers } = httpRequest;
 
-    console.log("Before auth!");
     checkAuthorization(headers);
 
     const {
@@ -26,8 +25,6 @@ const makeArtistCoverEndpointsHandler = () => {
       });
     }
 
-    console.log("File Detected!");
-
     if (!width || !height || !left || !top) {
       return makeHttpResponse({
         error: true,
@@ -36,12 +33,8 @@ const makeArtistCoverEndpointsHandler = () => {
       });
     }
 
-    console.log("Other params present!");
-
     const coverImage = files.image;
     const imagePath = `${process.cwd()}/public/temp/${getRandomJPEGName()}`;
-
-    console.log(imagePath);
 
     const extractData = {
       width: parseInt(width),
@@ -53,19 +46,13 @@ const makeArtistCoverEndpointsHandler = () => {
     try {
       await cropImageAndSave(coverImage.data, extractData, imagePath);
 
-      console.log("Image Saved!");
-
       const uploaded = await uploadImagetoImgBB(imagePath);
-
-      console.log("Image Uploaded to ImgBB!");
 
       const {
         data: { url, delete_url: deleteUrl },
       } = uploaded;
 
       deleteImage(imagePath);
-
-      console.log("Image removed from disk!");
 
       return makeHttpResponse({ url, deleteUrl }, 201);
     } catch (e) {

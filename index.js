@@ -59,3 +59,8 @@ app.listen(PORT, () => {
   const env = process.env.NODE_ENV;
   console.log(`Server running in ${env} mode on port ${PORT}!`.black.bgCyan);
 });
+
+process.on("uncaughtException", function (err) {
+  console.error(err.stack);
+  process.exit(1);
+});

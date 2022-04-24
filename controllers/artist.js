@@ -36,6 +36,7 @@ export const handleSpotifyArtistsEndpoint = asyncWrap(
 );
 
 export const handleArtistCoverEndpoint = asyncWrap(async (req, res, _next) => {
+  console.log("REQUEST HIT!");
   const httpRequest = adaptRequest(req);
   const { headers, status, data } = await artistCoverEndpointHandler(
     httpRequest

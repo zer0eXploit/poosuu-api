@@ -4,7 +4,11 @@ import {
   makeHttpResponse,
   makeEmptyHttpResponse,
 } from "../../helpers/http-response.js";
-import { checkAuthorization, checkAPIKey } from "../../helpers/auth.js";
+import {
+  checkAuthorization,
+  checkAPIKey,
+  extractTokenFromHeader,
+} from "../../helpers/auth.js";
 import { ResourceNotFoundError } from "../../helpers/errors.js";
 
 // TODO: POST TO ALGOLIA INDEX
@@ -13,11 +17,14 @@ const makeArtistEndpointsHandler = (artistList) => {
   const getArtist = async (httpRequest) => {
     await checkAPIKey(httpRequest);
 
+    const token = extractTokenFromHeader(httpRequest.headers);
+    const select = token ? null : "-coverDeleteUrl";
+
     const {
       params: { id },
       query,
     } = httpRequest;
-    const artist = await artistList.getArtist(id, query);
+    const artist = await artistList.getArtist(id, query, select);
     if (!artist) throw new ResourceNotFoundError();
     return makeHttpResponse(artist);
   };

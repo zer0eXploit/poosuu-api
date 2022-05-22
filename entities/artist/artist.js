@@ -36,16 +36,19 @@ const makeArtist = (artistData = requiredParam("ArtistData")) => {
     bio = requiredParam("bio"),
     image = requiredParam("image"),
     cover = requiredParam("cover"),
+    coverDeleteUrl,
   }) => {
     validateName(name);
     validateArtistBio(bio);
     validateUrl("Image URL", image);
     validateUrl("Cover Image URL", cover);
+    validateUrl("Cover Delete URL", coverDeleteUrl);
     return {
       name,
       bio,
       image,
       cover,
+      coverDeleteUrl,
     };
   };
 

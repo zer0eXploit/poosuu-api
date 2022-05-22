@@ -28,7 +28,8 @@ const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
 
   const getArtistCount = async () => await ArtistModel.count();
 
-  const getArtistById = async (id) => await ArtistModel.findById(id);
+  const getArtistById = async (id, select) =>
+    await ArtistModel.findById(id).select(select);
 
   const getAllArtists = async (query) => {
     const { sortBy, limit, page, skip } = extractPaginationInfo(query);
@@ -53,10 +54,10 @@ const makeArtistList = ({ ArtistModel = {}, SongModel = {} }) => {
     return artists;
   };
 
-  const getArtist = async (id, query = {}) => {
+  const getArtist = async (id, query = {}, select) => {
     try {
       if (id) {
-        const artist = await getArtistById(id);
+        const artist = await getArtistById(id, select);
         if (!artist) throw new ResourceNotFoundError();
         return artist;
       }

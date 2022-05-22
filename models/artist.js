@@ -21,6 +21,9 @@ const ArtistSchema = new Schema(
       type: String,
       required: true,
     },
+    coverDeleteUrl: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -25,19 +25,17 @@ const makeLyrics = (lyricsData = requiredParam("lyricsData")) => {
 
   const validate = ({
     title = requiredParam("title"),
-    enLyrics = requiredParam("enLyrics"),
-    mmLyrics = [],
-    jpLyrics = [],
-    krLyrics = [],
+    lyricsData = requiredParam("lyricsData"),
+    youtubeEmbed = requiredParam("youtubeEmbed"),
   } = {}) => {
-    validateLyrics("English Lyrics", enLyrics);
     validateTitle(title);
+    validateTitle(youtubeEmbed);
+    validateLyrics("Lyrics Data", lyricsData);
+
     return {
       title: title,
-      enLyrics: Object.freeze(enLyrics),
-      mmLyrics: Object.freeze(mmLyrics),
-      jpLyrics: Object.freeze(jpLyrics),
-      krLyrics: Object.freeze(krLyrics),
+      youtubeEmbed: youtubeEmbed,
+      lyricsData: Object.freeze(lyricsData),
     };
   };
 

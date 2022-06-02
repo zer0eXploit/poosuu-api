@@ -8,10 +8,11 @@ const LyricsSchema = new Schema(
       type: String,
       required: true,
     },
-    enLyrics: [{ type: String, required: true }],
-    mmLyrics: [String],
-    jpLyrics: [String],
-    krLyrics: [String],
+    lyricsData: [{}],
+    youtubeEmbed: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -31,3 +31,11 @@ It is a good idea to seed the database initially. The seed script populates the 
 ## API Documentation
 
 The full API documentation is available [here](https://documenter.getpostman.com/view/8103362/UVXerxrb).
+
+## Support
+
+You can support me by scanning the following QR.
+
+<p align="left">
+   <img src="https://bit.ly/3ICIOfv" alt="Buy me a coffee!"/>
+</p>

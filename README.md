@@ -37,5 +37,5 @@ The full API documentation is available [here](https://documenter.getpostman.com
 You can support me by scanning the following QR.
 
 <p align="left">
-   <img src="https://bit.ly/3ICIOfv" alt="Buy me a coffee!"/>
+   <img src="https://i.ibb.co/Jcf2t3g/bmc-qr.png" alt="Buy me a coffee!"/>
 </p>

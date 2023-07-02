@@ -11,5 +11,5 @@ export const extractPaginationInfo = (query) => {
   let limit = parseInt(query.limit) || 25;
   if (limit > 25) limit = 25;
   const skip = (page - 1) * limit;
-  return { sortBy: `id ${sortBy}`, limit, page, skip };
+  return { sort: `id ${sortBy}`, limit, page, skip };
 };

@@ -1,5 +1,7 @@
 # Poo Suu API
 
+![example event parameter](https://github.com/zer0eXploit/poosuu-api/actions/workflows/main.yml/badge.svg?event=push)
+
 **Poo Suu** is a website where various J-pop/K-pop song lyrics are translated and uploaded for the music lovers. This API backs the service with CRUD operation related to songs, artists and lyrics and administration functionalities.
 
 This project is implemented more or less by following the CLEAN Architecture. It is made to not depend heavily on Express's framework features so that it will be resilient to changes overtime.

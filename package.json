@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "test": "mocha",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "db:seed": "node seed/seeder.js -i",
@@ -32,6 +33,7 @@
     "sharp": "^0.30.4"
   },
   "devDependencies": {
+    "mocha": "^10.2.0",
     "morgan": "^1.10.0"
   }
 }
